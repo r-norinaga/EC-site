@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- MapperとXMLのマッピング -->
+<mapper namespace="katachi.spring.exercise.repository.UserMapper">
+	<resultMap type="katachi.spring.exercise.domain.user.model.User" id="User">
+		<id column="user_id" property="userId"/>
+		<result column="user_name" property="userName"/>
+		<result column="password" property="password"/>
+		<result column="surname" property="surname"/>
+		<result column="given_name" property="givenName"/>
+		<result column="email_address" property="emailAddress"/>
+		<result column="home_address" property="homeAddress"/>
+		<result column="addressee" property="addressee"/>
+		<result column="mobile_phone_number" property="mobilePhoneNumber"/>
+
+
+	</resultMap>
+
+	<resultMap type="katachi.spring.exercise.domain.user.model.UserPaymentInfo" id="UserPaymentInfo">
+		<id column="user_id" property="userId"/>
+		<result column="credit_card_number" property="creditCardNumber"/>
+		<result column="credit_card_user_name" property="creditCardUserName"/>
+		<result column="credit_card_expiration_month" property="creditCardExpirationMonth"/>
+		<result column="credit_card_verification_code" property="creditCardVerificationCode"/>
+	</resultMap>
+
+
+	<resultMap type="katachi.spring.exercise.domain.user.model.LoginUser" id="LoginUser">
+		<id column="user_id" property="userId"/>
+		<result column="user_name" property="username"/>
+		<result column="password" property="password"/>
+	</resultMap>
+
+<!-- ユーザー一件登録 -->
+	<insert id="insertOne">
+		insert into users(
+			user_name,
+			password,
+			surname,
+			given_name,
+			registration_date_time,
+			update_date_time,
+			email_address,
+			home_address,
+			addressee,
+			mobile_phone_number
+		) values(
+			#{user.userName},
+			#{user.password},
+			#{user.surname},
+			#{user.givenName},
+			now(),
+			now(),
+			#{user.emailAddress},
+			#{user.homeAddress},
+			#{user.addressee},
+			#{user.mobilePhoneNumber}
+		)
+	</insert>
+
+<!-- ユーザー名の重複の確認 -->
+	<select id="overlappingCheckName" resultType="string">
+		select user_name from users where user_name = #{userName}
+	</select>
+
+<!-- Emailアドレスの重複の確認 -->
+	<select id="overlappingCheckEmail" resultType="string">
+		select Email_Address from users where Email_Address = #{emailAddress}
+	</select>
+
+	<select id="findLoginUser" resultMap="User">
+		select * from users where user_name = #{userName}
+	</select>
+
+	<select id="findLoginUserById" resultMap="User">
+		select * from users where user_name = #{userId}
+
+	</select>
+
+	<select id="findUserPaymentInfo" resultMap="UserPaymentInfo">
+		select * from user_payment_info where user_id = #{userId}
+	</select>
+
+	<update id="updateUserInfo">
+		update users
+			set
+				 password = #{user.password},
+				 surname = #{user.surname},
+				 given_name = #{user.givenName},
+				 email_address = #{user.emailAddress},
+				 home_address = #{user.homeAddress},
+				 addressee = #{user.addressee},
+				 mobile_phone_number = #{user.mobilePhoneNumber},
+				 update_date_time = now()
+			where
+					user_id = #{user.userId}
+	</update>
+
+
+	<insert id="insertUserPaymentInfo">
+		insert into user_payment_info(
+			user_id,
+			credit_card_number,
+			credit_card_user_name,
+			credit_card_expiration_month,
+			credit_card_verification_code
+		) values(
+			#{userPaymentInfo.userId},
+			#{userPaymentInfo.creditCardNumber},
+			#{userPaymentInfo.creditCardUserName},
+			#{userPaymentInfo.creditCardExpirationMonth},
+			#{userPaymentInfo.creditCardVerificationCode}
+		)
+	</insert>
+
+	<update id="updateUserPaymentInfo">
+		update user_payment_info
+			set
+				 credit_card_number = #{userPaymentInfo.creditCardNumber},
+				 credit_card_user_name = #{userPaymentInfo.creditCardUserName},
+				 credit_card_expiration_month = #{userPaymentInfo.creditCardExpirationMonth},
+				 credit_card_verification_code = #{userPaymentInfo.creditCardVerificationCode}
+			where
+					user_id = #{userPaymentInfo.userId}
+	</update>
+
+
+</mapper>

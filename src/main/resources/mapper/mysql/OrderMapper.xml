@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- MapperとXMLのマッピング -->
+<mapper namespace="katachi.spring.exercise.repository.OrderMapper">
+	<resultMap type="katachi.spring.exercise.domain.user.model.Order" id="Order">
+		<id column="order_id" property="orderId"/>
+		<id column="user_id" property="userId"/>
+		<result column="email_address" property="emailAddress"/>
+		<result column="shipping_address" property="shippingAddress"/>
+		<result column="billing_address" property="billingAddress"/>
+		<result column="addressee" property="addressee"/>
+		<result column="mobile_phone_number" property="mobilePhoneNumber"/>
+		<result column="credit_card_number" property="creditCardNumber"/>
+		<result column="credit_card_user_name" property="creditCardUserName"/>
+		<result column="credit_card_expiration_month" property="creditCardExpirationMonth"/>
+		<result column="credit_card_verification_code" property="creditCardVerificationCode"/>
+		<result column="order_date_time" property="orderDateTime"/>
+	</resultMap>
+	<insert id="insertOne" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+		insert into orders(
+			order_id,
+			user_id,
+			addressee,
+			email_address,
+			shipping_address,
+			mobile_phone_number,
+			credit_card_number,
+			credit_card_user_name,
+			credit_card_expiration_month,
+			credit_card_verification_code,
+			order_date_time
+		) values(
+			#{order.orderId},
+			#{order.userId},
+			#{order.addressee},
+			#{order.emailAddress},
+			#{order.shippingAddress},
+			#{order.mobilePhoneNumber},
+			#{order.creditCardNumber},
+			#{order.creditCardUserName},
+			#{order.creditCardExpirationMonth},
+			#{order.creditCardVerificationCode},
+			#{order.orderDateTime}
+		)
+	</insert>
+
+	<select id="getOrder" resultMap="Order">
+		select * from orders where order_id = #{orderId}
+	</select>
+
+
+</mapper>

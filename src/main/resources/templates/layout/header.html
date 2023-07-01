@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	<!-- レイアウト用CSS -->
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+	<nav layout:fragment="header" class="navbar navbar-inverse navbar-fixed-top navbar-dark bg-dark">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">残念なECサイト</a>
+			</div>
+			<form method="post" th:action="@{/logout}">
+				<button class="btn btn-link pull-right navbar-brand btn-primary" type="submit">ログアウト</button>
+			</form>
+
+		</div>
+
+		<th:block th:if="${loginUserName == null}">
+			<div class="loginStateInfo">
+				<p class="text-white">ログインしておりません。</p>
+				<p class="text-white">アカウントをお持ちの方は下記↓よりログインを推奨します。</p>
+				<a class="btn btn-primary" th:href="@{'/login'}">ログイン</a>
+			</div>
+		</th:block>
+		<th:block th:unless="${loginUserName == null}">
+			<p class="loginUserName" th:text="${loginUserName} + ' さんがログイン中です'"></p>
+		</th:block>
+	</nav>
+
+</body>
+</html>

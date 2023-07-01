@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- インターフェースとxmlのマッピング -->
+<mapper namespace="katachi.spring.exercise.repository.ItemMapper">
+
+<resultMap type="katachi.spring.exercise.domain.user.model.Item" id="item">
+<id column="id" property="id"/>
+<result column="item_name" property="name"/>
+<result column="price" property="price"/>
+<result column="registration_date_time" property="registrationDateTime"/>
+<result column="update_date_time" property="updateDateTime"/>
+<result column="deleteion" property="deletion"/>
+<result column="stock" property="stock"/>
+<result column="description" property="description"/>
+<result column="image" property="image"/>
+
+
+
+</resultMap>
+
+<!-- ユーザー複数件取得 -->
+<select id="findMany" resultMap="item">
+	select * from items
+</select>
+
+<select id="findOne" resultMap="item">
+	select * from items where id = #{id}
+</select>
+
+</mapper>

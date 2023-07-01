@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+layout:decorate="~{layout/layout}">
+	<head>
+		<meta charset="UTF-8">
+		<title>個人情報入力画面</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<h1>個人情報入力画面</h1>
+			<form method="post" th:action="@{/item/personalInfo}" th:object="${personalInfoForm}">
+				<table border="1" class="table table-bordered">
+					<input type="hidden" th:field="*{userId}"/>
+					<tr>
+						<th><label for="addressee" th:text="#{addressee}"></label></th>
+						<td>
+							<input type="text" th:field="*{addressee}" th:errorclass="is-invalid"/>
+							<div class="invalid-feedback" th:errors="*{addressee}"></div>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="emailAddress" th:text="#{emailAddress}"></label></th>
+						<td>
+							<input type="text" th:field="*{emailAddress}" th:errorclass="is-invalid"/>
+							<div class="invalid-feedback" th:errors="*{emailAddress}"></div>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="shippingAddress" th:text="#{shippingAddress}"></label></th>
+						<td>
+							<input type="text" th:field="*{shippingAddress}" th:errorclass="is-invalid"/>
+							<div class="invalid-feedback" th:errors="*{shippingAddress}"></div>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="mobilePhoneNumber" th:text="#{mobilePhoneNumber}"></label></th>
+						<td>
+							<input type="text" th:field="*{mobilePhoneNumber}" pattern="^[0-9]+$" maxlength="11" th:errorclass="is-invalid"/>
+							<div class="invalid-feedback" th:errors="*{mobilePhoneNumber}"></div>
+						</td>
+					</tr>
+				</table>
+				<button class="btn btn-primary" type="submit">決済情報の入力</button>
+<!-- 				<button class="btn btn-primary" type="submit" name="goingBack">前画面に戻る</button>   -->
+			</form>
+			<a th:href="@{'/item/cancellation'}" class="btn btn-primary">購入を手続をキャンセルする</a>
+		</div>
+
+	</body>
+</html>
