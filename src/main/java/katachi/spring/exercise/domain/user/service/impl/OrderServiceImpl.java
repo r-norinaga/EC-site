@@ -19,6 +19,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	public void orderPlacementWithoutUserId(Order order) {
+		orderMapper.insertOneWithoutUserId(order);
+	}
+
+	@Override
 	public Order getOrder(int orderId) {
 		return orderMapper.getOrder(orderId);
 	}

@@ -9,9 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -184,34 +182,31 @@ public class ItemListController {
 				return "redirect:/item/itemList" ;
 			}
 
-			HttpSession session =request.getSession();
-			SecurityContext securityContext = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
-			Authentication authentication =	securityContext.getAuthentication();
+//			HttpSession session =request.getSession();
+//			SecurityContext securityContext = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
+//			Authentication authentication = (Authentication)securityContext.getAuthentication();
 
+			if(user != null) {
+//				if(authentication != null) {
 
-				if(authentication != null) {
-					User loginUser = userService.getLoginUser(user.getUsername());
-					if(err!="error") {
-						personalInfoForm = modelMapper.map(loginUser, PersonalInfoForm.class);
-						personalInfoForm.setShippingAddress(loginUser.getHomeAddress());
-						if(loginUser.getAddressee() == null) {
-							personalInfoForm.setAddressee(loginUser.getSurname() + " " + loginUser.getGivenName());
+						User loginUser = userService.getLoginUser(user.getUsername());
+						if(err!="error") {
+							personalInfoForm = modelMapper.map(loginUser, PersonalInfoForm.class);
+							personalInfoForm.setShippingAddress(loginUser.getHomeAddress());
+							if(loginUser.getAddressee() == null) {
+								personalInfoForm.setAddressee(loginUser.getSurname() + " " + loginUser.getGivenName());
+							}else {
+								personalInfoForm.setAddressee(loginUser.getAddressee());
+							}
+
 						}else {
-							personalInfoForm.setAddressee(loginUser.getAddressee());
+							err = "";
 						}
 
-					}else {
-						err = "";
-					}
-				}
-
-
-
-
+//				}
+			}
 		}else {
-
 			personalInfoForm = personalInfoFormPrevious;
-
 		}
 
 
@@ -254,33 +249,39 @@ public class ItemListController {
 
 	@GetMapping("/paymentInfo")
 	public String getPaymentInfo(Model model, @ModelAttribute PaymentInfoForm paymentInfoForm, @AuthenticationPrincipal UserDetails user,  RedirectAttributes redirectAttributes, String err) {
-		if(user != null) {
-			model.addAttribute("loginUserName", user.getUsername());
-		}
-
-		User loginUser = userService.getLoginUser(user.getUsername());
 		PaymentInfoForm paymentInfoFormPrevious = modelMapper.map(infoAdministrater, PaymentInfoForm.class);
 
-		if(paymentInfoFormPrevious.getCreditCardNumber() == null) {
-			UserPaymentInfo userPaymentInfo = userService.getUserPaymentInfo(loginUser.getUserId());
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+			User loginUser = userService.getLoginUser(user.getUsername());
+
+			if(paymentInfoFormPrevious.getCreditCardNumber() == null) {
+				UserPaymentInfo userPaymentInfo = userService.getUserPaymentInfo(loginUser.getUserId());
 
 
-			if(err!="error") {
-				if(userPaymentInfo != null) {
-					paymentInfoForm = modelMapper.map(userPaymentInfo, PaymentInfoForm.class);
+				if(err!="error") {
+					if(userPaymentInfo != null) {
+						paymentInfoForm = modelMapper.map(userPaymentInfo, PaymentInfoForm.class);
+
+					}else {
+						paymentInfoForm = new PaymentInfoForm();
+						paymentInfoForm.setUserId(loginUser.getUserId());
+
+					}
 
 				}else {
-					paymentInfoForm = new PaymentInfoForm();
-					paymentInfoForm.setUserId(loginUser.getUserId());
-
+					err = "";
 				}
-
 			}else {
-				err = "";
+				paymentInfoForm = paymentInfoFormPrevious;
 			}
-		}else {
-			paymentInfoForm = paymentInfoFormPrevious;
+
 		}
+
+
+
+
+
 
 
 
@@ -343,7 +344,8 @@ public class ItemListController {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
-		System.out.println(session);
+
+
 
 		model.addAttribute("order", order);
 
@@ -391,8 +393,6 @@ public class ItemListController {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
 
-
-
 		order = modelMapper.map(infoAdministrater, Order.class);
 
 		model.addAttribute("order", order);
@@ -404,12 +404,24 @@ public class ItemListController {
 	public String postOrderPlacement(Model model, @ModelAttribute Order order, @AuthenticationPrincipal UserDetails user) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
-		}
+//			User loginUser = userService.getLoginUser(user.getUsername());
+//			order.setUserId(loginUser.getUserId());
+		} /*else { */
+//			order.setUserId(0);
+//		}
 		order = modelMapper.map(infoAdministrater, Order.class);
 
-		model.addAttribute("order", order);
 		order.setOrderDateTime(LocalDateTime.now());
-		orderService.orderPlacement(order);
+
+		if(order.getUserId() == 0) {
+			orderService.orderPlacementWithoutUserId(order);
+		} else {
+			orderService.orderPlacement(order);
+		}
+
+		model.addAttribute("order", order);
+
+
 
 		for(CartItem products: cart.getCartItems()) {
 			orderDetail.setItemId(products.getItem().getId());
@@ -420,8 +432,10 @@ public class ItemListController {
 
 		}
 
+		UserDetails user2 = user;
 		cart.clearCart();
-		session.removeAttribute("infoAdministrater");
+		session.invalidate();
+		session.setAttribute("user", user2);
 
 		return "/itemList/orderPlacement";
 	}

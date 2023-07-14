@@ -42,6 +42,7 @@ public class SecurityConfig {
             .antMatchers("/signup/signup").permitAll()
             .antMatchers("/item").permitAll()
             .antMatchers("/item/*").permitAll()
+            .antMatchers("/item/personalInfo").permitAll()
             .antMatchers("/picture/*").permitAll()
             .anyRequest().authenticated()
         );

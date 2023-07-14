@@ -31,6 +31,7 @@
 			<th><label for="name" th:text="#{name}"></label></th>
 			<th><label for="price" th:text="#{price}"></label></th>
 			<th><label for="stock" th:text="#{stock}"></label></th>
+			<th><label for="picture" th:text="#{picture}"></label></th>
 <!--
 			<th><label th:text="#{picture}"></label></th>
 -->
@@ -43,6 +44,11 @@
 				<td th:text="${item.name}"></td>
 				<td th:text="${item.price}"></td>
 				<td th:text="${item.stock}"></td>
+				<td class="outerFrame">
+					<div class="outerImage">
+						<img th:src="${'/picture/' + item.image}" class="innerImage" alt="">
+					</div>
+				</td>
 
 				<form method="post" th:action="@{/item/cart}">
 					<input type="hidden" th:name="id" th:value="${item.id}" />

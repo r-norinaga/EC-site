@@ -46,3 +46,21 @@
 .modalImage{
 	width:50%;
 }
+
+.outerImage{
+	width:100%;
+	height:50%;
+	display:block;
+
+}
+
+.innerImage{
+	width:50%;
+	height:50%;
+	display:block;
+}
+
+.outerFrame{
+	width:400px;
+	height:50%;
+}
