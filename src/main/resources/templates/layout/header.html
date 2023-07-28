@@ -13,7 +13,7 @@ layout:decorate="~{layout/layout}">
 	<nav layout:fragment="header" class="navbar navbar-inverse navbar-fixed-top navbar-dark bg-dark">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">ECサイト</a>
+				<a class="navbar-brand">ECサイト</a>
 			</div>
 			<form method="post" th:action="@{/logout}">
 				<button class="btn btn-link pull-right navbar-brand btn-primary" type="submit">ログアウト</button>
@@ -31,7 +31,65 @@ layout:decorate="~{layout/layout}">
 		<th:block th:unless="${loginUserName == null}">
 			<p class="loginUserName" th:text="${loginUserName} + ' さんがログイン中です'"></p>
 		</th:block>
+<!--
+		<img width="106" height="10" border="0" src="https://joshinweb.jp/emall/img/wpp/jmall/ind_cart.gif">
+ -->
 	</nav>
+	<nav layout:fragment="header" class="navbar navbar-inverse navbar-fixed-top navbar-dark bg-dark navbar-progress">
+		<div class="progress-bar-header text-white">
+			<progress id="file" max="100" th:value="${percentage}"></progress>
+			<p class="percentage" th:text="${percentage + '%'}"></p>
+			<ol class="breadcrumb bg-transparent">
+    			<li th:class="breadcrumb-item">
+    				<th:block th:if="${isCart}">
+    					<p class="text-black">カート</p>
+    				</th:block>
+    				<th:block th:unless="${isCart}">
+    				</th:block>
+    			</li>
+    			<li class="breadcrumb-item" >
+    				<th:block th:if="${isPersonalInfo}">
+    					<p class="text-black">配送情報</p>
+    				</th:block>
+    				<th:block th:unless="${isPersonalInfo}">
+    				</th:block>
+    			</li>
+
+    			<li class="breadcrumb-item">
+    				<th:block th:if="${isPaymentInfo}">
+    					<p class="text-black">決済情報</p>
+    				</th:block>
+    				<th:block th:unless="${isPaymentInfo}">
+    				</th:block>
+    			</li>
+
+    			<li class="breadcrumb-item">
+    				<th:block th:if="${isConfirmation}">
+    					<p class="text-black">最終確認</p>
+    				</th:block>
+    				<th:block th:unless="${isConfirmtation}">
+    				</th:block>
+    			</li>
+
+  			</ol>
+		</div>
+	</nav>
+
+
+<!--
+	<nav layout:fragment="header" class="navbar navbar-inverse navbar-fixed-top navbar-dark bg-dark" aria-label="breadcrumb">
+  		<ol class="breadcrumb">
+    		<li class="breadcrumb-item"><a href="/item/itemList">商品一覧</a></li>
+    		<li class="breadcrumb-item"><a href="/item/cart">カート</a></li>
+    		<li class="breadcrumb-item"><a href="/item/personalInfo">配送情報</a></li>
+    		<li class="breadcrumb-item"><a href="/item/paymentInfo">決済情報</a></li>
+    		<li class="breadcrumb-item"><a href="/item/confirmation">最終確認</a></li>
+
+    		<li class="breadcrumb-item active" aria-current="page"><a href="/item/paymentInfo">決済情報</a></li>
+
+  		</ol>
+	</nav>
+-->
 
 </body>
 </html>

@@ -3,3 +3,18 @@
 	float:left;
 
 }
+
+.navbar-progress{
+		display:inline;
+		float:left;
+}
+
+.progress-bar-header{
+		display:inline;
+		float:left;
+}
+
+.percentage{
+	display:inline;
+	float:left;
+}

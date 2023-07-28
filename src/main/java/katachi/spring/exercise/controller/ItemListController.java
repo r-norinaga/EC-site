@@ -107,6 +107,9 @@ public class ItemListController {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
+		model.addAttribute("percentage", 25);
+		boolean isCart = true;
+		model.addAttribute("isCart", isCart);
 		return "itemList/cart";
 	}
 
@@ -169,6 +172,10 @@ public class ItemListController {
 
 	@GetMapping("/personalInfo")
 	public String getPersonalInfo(Model model, @ModelAttribute PersonalInfoForm personalInfoForm, @AuthenticationPrincipal UserDetails user, RedirectAttributes redirectAttributes, String err) {
+		if(cart == null) {
+			return "redirect:/item/itemList";
+		}
+
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -206,16 +213,25 @@ public class ItemListController {
 //				}
 			}
 		}else {
-			personalInfoForm = personalInfoFormPrevious;
+			if(personalInfoFormPrevious.getEmailAddress() != null) {
+				personalInfoForm = personalInfoFormPrevious;
+			}
+
 		}
 
 
 		model.addAttribute("personalInfoForm", personalInfoForm);
+		model.addAttribute("percentage", 50);
+		boolean isCart = true;
+		model.addAttribute("isCart", isCart);
+		boolean isPersonalInfo = true;
+		model.addAttribute("isPersonalInfo", isPersonalInfo);
 		return "itemList/personalInfo";
 	}
 
 	@PostMapping("/personalInfo")
 	public String postPersonalInfo(Model model, @ModelAttribute @Validated PersonalInfoForm personalInfoForm, BindingResult bindingResult, @AuthenticationPrincipal UserDetails user, RedirectAttributes redirectAttributes) {
+
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -238,9 +254,13 @@ public class ItemListController {
 		}
 
 		if(bindingResult.hasErrors()) {
+			if(infoAdministrater.getAddressee() == null & infoAdministrater.getEmailAddress() == null & infoAdministrater.getShippingAddress() == null & infoAdministrater.getMobilePhoneNumber() == null) {
+				session.setAttribute("personalInfoComp", "0");
+			}
 			return getPersonalInfo(model,  personalInfoForm,  user, redirectAttributes, "error");
 		}else {
 			BeanUtils.copyProperties(personalInfoForm, infoAdministrater);
+			session.setAttribute("personalInfoComp", "1");
 			return "redirect:/item/paymentInfo";
 		}
 
@@ -249,7 +269,17 @@ public class ItemListController {
 
 	@GetMapping("/paymentInfo")
 	public String getPaymentInfo(Model model, @ModelAttribute PaymentInfoForm paymentInfoForm, @AuthenticationPrincipal UserDetails user,  RedirectAttributes redirectAttributes, String err) {
+		if(cart == null) {
+			return "redirect:/item/itemList";
+		}
+
 		PaymentInfoForm paymentInfoFormPrevious = modelMapper.map(infoAdministrater, PaymentInfoForm.class);
+
+		System.out.println(session.getAttribute("personalInfoComp"));
+
+		if(session.getAttribute("personalInfoComp") == "0" || session.getAttribute("personalInfoComp") ==  null) {
+			return "redirect:/item/personalInfo";
+		}
 
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
@@ -275,18 +305,20 @@ public class ItemListController {
 			}else {
 				paymentInfoForm = paymentInfoFormPrevious;
 			}
-
+		}else {
+			if(paymentInfoFormPrevious.getCreditCardNumber() != null) {
+				paymentInfoForm = paymentInfoFormPrevious;
+			}
 		}
 
-
-
-
-
-
-
-
-
 		model.addAttribute("paymentInfoForm", paymentInfoForm);
+		model.addAttribute("percentage", 75);
+		boolean isCart = true;
+		model.addAttribute("isCart", isCart);
+		boolean isPersonalInfo = true;
+		model.addAttribute("isPersonalInfo", isPersonalInfo);
+		boolean isPaymentInfo = true;
+		model.addAttribute("isPaymentInfo", isPaymentInfo);
 		return "itemList/paymentInfo";
 
 
@@ -316,6 +348,9 @@ public class ItemListController {
 		}
 
 		if(bindingResult.hasErrors()) {
+			if(infoAdministrater.getCreditCardNumber() == null & infoAdministrater.getCreditCardUserName() == null & infoAdministrater.getCreditCardExpirationMonth() == null & infoAdministrater.getCreditCardVerificationCode() == null) {
+				session.setAttribute("paymentInfoComp", "0");
+			}
 			return getPaymentInfo(model, paymentInfoForm, user, redirectAttributes, "error");
 		}else {
 			infoAdministrater.setCreditCardNumber(paymentInfoForm.getCreditCardNumber());
@@ -326,6 +361,7 @@ public class ItemListController {
 
 			infoAdministrater.setCreditCardNumberAsterisked(infoAdministrater.asteriskingCreditCardNumber());
 			infoAdministrater.setCreditCardVerificationCodeAsterisked(infoAdministrater.asteriskingCreditCardVerificationCode());
+			session.setAttribute("paymentInfoComp", "1");
 			return "redirect:/item/confirmation";
 		}
 
@@ -341,6 +377,14 @@ public class ItemListController {
 
 	@GetMapping("/confirmation")
 	public String getConfirmation(Model model, @ModelAttribute Order order, @AuthenticationPrincipal UserDetails user, RedirectAttributes redirectAttributes){
+		if(cart == null) {
+			return "redirect:/item/itemList";
+		}
+
+		if(session.getAttribute("paymentInfoComp") == "0" || session.getAttribute("paymentInfoComp") == null || session.getAttribute("personalInfoComp") == "0" || session.getAttribute("personalInfoComp") == null) {
+			return "redirect:/item/paymentInfo";
+		}
+
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -348,12 +392,23 @@ public class ItemListController {
 
 
 		model.addAttribute("order", order);
-
+		model.addAttribute("percentage", 95);
+		boolean isCart = true;
+		model.addAttribute("isCart", isCart);
+		boolean isPersonalInfo = true;
+		model.addAttribute("isPersonalInfo", isPersonalInfo);
+		boolean isPaymentInfo = true;
+		model.addAttribute("isPaymentInfo", isPaymentInfo);
+		boolean isConfirmation = true;
+		model.addAttribute("isConfirmation", isConfirmation);
+		System.out.println(infoAdministrater);
 		return "itemList/confirmation";
 	}
 
 	@PostMapping("/confirmation")
 	public String postConfirmation(Model model, @ModelAttribute Order order, @AuthenticationPrincipal UserDetails user, RedirectAttributes redirectAttributes){
+
+
 
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
@@ -363,6 +418,11 @@ public class ItemListController {
 
 		model.addAttribute("order", order);
 
+		if(session.getAttribute("paymentInfoComp") == "0" || session.getAttribute("paymentInfoComp") == null || session.getAttribute("personalInfoComp") == "0" || session.getAttribute("personalInfoComp") == null) {
+			session.setAttribute("confirmationComp", "0");
+		}else {
+			session.setAttribute("confirmationComp", "1");
+		}
 
 		return "redirect:/item/orderPlacement";
 	}
@@ -389,6 +449,14 @@ public class ItemListController {
 
 	@GetMapping("/orderPlacement")
 	public String getOrderPlacement(Model model, @ModelAttribute Order order, @AuthenticationPrincipal UserDetails user, RedirectAttributes redirectAttributes){
+		if(cart == null) {
+			return "redirect:/item/itemList";
+		}
+
+		if(session.getAttribute("paymentInfoComp") == "0" || session.getAttribute("paymentInfoComp") == null || session.getAttribute("personalInfoComp") == "0" || session.getAttribute("personalInfoComp") == null || session.getAttribute("confirmationComp") == "0" || session.getAttribute("confirmationComp") == null ) {
+			return "redirect:/item/paymentInfo";
+		}
+
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
