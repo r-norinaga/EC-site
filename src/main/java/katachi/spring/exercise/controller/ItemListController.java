@@ -275,7 +275,6 @@ public class ItemListController {
 
 		PaymentInfoForm paymentInfoFormPrevious = modelMapper.map(infoAdministrater, PaymentInfoForm.class);
 
-		System.out.println(session.getAttribute("personalInfoComp"));
 
 		if(session.getAttribute("personalInfoComp") == "0" || session.getAttribute("personalInfoComp") ==  null) {
 			return "redirect:/item/personalInfo";

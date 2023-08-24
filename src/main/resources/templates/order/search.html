@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{layout/layout}">
+<head>
+	<meta charset="UTF-8">
+	<title>注文検索</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<h1>注文情報の検索画面</h1>
+		<form method="post" th:action="@{/order/search}" th:object="${orderSearchForm}">
+			<table border="1" class="table table-bordered">
+				<tr>
+					<th>
+						<label for="orderId" th:text="#{orderId}"></label>
+					</th>
+
+					<td>
+						<input type="text" th:field="*{orderId}" th:errorclass="is-invalid"/>
+						<div class="invalid-feedback" th:errors="*{orderId}"></div>
+					</td>
+				</tr>
+			</table>
+
+
+		<button class="btn btn-primary" type="submit">検索開始</button>
+		</form>
+	</div>
+</body>
+</html>

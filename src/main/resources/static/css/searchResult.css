@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.order-user-info th{
+	background-color:#CCFFFF;
+}
+
+.order-single-item-info th{
+	background-color:#CCFFCC;
+}
+
+
+.order-total-price th {
+	background-color:#FFCC99;
+}
+
+.order-user-info tr, .order-item-info tr, .order-total-price tr {
+	border-style:ridge;
+	border-color:#6495ed;
+
+}
+
+th, td{
+	frame:vsides;
+}

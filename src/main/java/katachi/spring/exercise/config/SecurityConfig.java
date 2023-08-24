@@ -44,6 +44,7 @@ public class SecurityConfig {
             .antMatchers("/item/*").permitAll()
             .antMatchers("/item/personalInfo").permitAll()
             .antMatchers("/picture/*").permitAll()
+            .antMatchers("/order/*").permitAll()
             .anyRequest().authenticated()
         );
 
