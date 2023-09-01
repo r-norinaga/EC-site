@@ -42,3 +42,13 @@
 https://github.com/r-norinaga/EC-site/assets/138180446/2a9462d0-b685-46a8-bd6e-cdf7fe181e0e
 
 
+
+### 注文履歴検索
+
+
+
+https://github.com/r-norinaga/EC-site/assets/138180446/ebcb2700-7181-4250-b386-27db9a0db855
+
+
+
+
