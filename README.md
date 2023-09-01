@@ -33,3 +33,12 @@
 フロントエンド : HTML, CSS(BootStrap4), JavaScript
 
 フレームワーク : SpringBoot
+
+
+## 解説動画
+### 商品購入
+
+
+https://github.com/r-norinaga/EC-site/assets/138180446/2a9462d0-b685-46a8-bd6e-cdf7fe181e0e
+
+
