@@ -1,4 +1,5 @@
 package katachi.spring.exercise.controller;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import katachi.spring.exercise.domain.user.model.User;
 import katachi.spring.exercise.domain.user.model.UserPaymentInfo;
@@ -166,7 +168,7 @@ public class SignupController {
 	}
 
 	@GetMapping("/userPaymentInfo")
-	public String getUserPaymentInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute UserPaymentInfoForm userPaymentInfoForm, String err) {
+	public String getUserPaymentInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute UserPaymentInfoForm userPaymentInfoForm) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -174,23 +176,74 @@ public class SignupController {
 
 		User loginUser = userService.getLoginUser(user.getUsername());
 		model.addAttribute("loginUserName", user.getUsername());
-		if(err != "err") {
-			UserPaymentInfo userPaymentInfo = userService.getUserPaymentInfo(loginUser.getUserId());
-			if(userPaymentInfo != null) {
-				userPaymentInfoForm = modelMapper.map(userPaymentInfo, UserPaymentInfoForm.class);
-				model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
+
+			List<UserPaymentInfo> userPaymentInfoList = userService.getUserPaymentInfo(loginUser.getUserId());
+			if(userPaymentInfoList.size() != 0) {
+				model.addAttribute("userPaymentInfoList", userPaymentInfoList);
 			}else {
-				userPaymentInfoForm = new UserPaymentInfoForm();
-				userPaymentInfoForm.setUserId(loginUser.getUserId());
-				model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
+//				userPaymentInfoForm = new UserPaymentInfoForm();
+//				userPaymentInfoForm.setUserId(loginUser.getUserId());
+//				model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
 			}
+			model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
+
+
+
+
+		return "user/userPaymentInfoList";
+	}
+
+
+	@PostMapping("/userPaymentInfo")
+	public String postUserPaymentInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute UserPaymentInfoForm userPaymentInfoForm, /* @RequestParam("creditCardNumber")String creditCardNumber,*/ RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
 		}
+
+
+		User loginUser = userService.getLoginUser(user.getUsername());
+		model.addAttribute("loginUserName", user.getUsername());
+
+		redirectAttributes.addFlashAttribute("userPaymentInfoForm", userPaymentInfoForm);
+
+
+
+// NG:ユーザー登録画面に戻ります
+//			return getUserPaymentInfo(model, user, userPaymentInfoForm, "err");
+//
+//		UserPaymentInfo userPaymentInfo = userService.getUserPaymentInfoByCreditCardNumber(creditCardNumber);
+//		userPaymentInfoForm = modelMapper.map(userPaymentInfo, UserPaymentInfoForm.class);
+//		model.addAttribute("userPaymentInfoForm" , userPaymentInfoForm);
+
+
+		return "redirect:/signup/EditUserPaymentInfo";
+	}
+
+	@GetMapping("/EditUserPaymentInfo")
+	public String getUserPaymentInfoEdition(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute("userPaymentInfoForm") UserPaymentInfoForm userPaymentInfoForm, RedirectAttributes redirectAttributes, String err) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+		}
+
+
+		User loginUser = userService.getLoginUser(user.getUsername());
+		model.addAttribute("loginUserName", user.getUsername());
+
+
+		model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
+
+
+//		if(err != "err") {
+//
+//		}
+
+
 
 		return "user/userPaymentInfoForm";
 	}
 
-	@PostMapping("/userPaymentInfoUpdate")
-	public String postUserPaymentInfoUpdate(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute @Validated UserPaymentInfoForm userPaymentInfoForm, BindingResult bindingResult) {
+	@PostMapping(value="/EditUserPaymentInfo", params="edition")
+	public String postUserPaymentInfoEdition(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute @Validated UserPaymentInfoForm userPaymentInfoForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -215,14 +268,19 @@ public class SignupController {
 		}
 
 
+
 		if (bindingResult.hasErrors()) {
 			// NG:ユーザー登録画面に戻ります
-			return getUserPaymentInfo(model, user, userPaymentInfoForm, "err");
+			return getUserPaymentInfoEdition(model, user, userPaymentInfoForm, redirectAttributes, "err");
 			} else {
 				if(userService.getUserPaymentInfo(loginUser.getUserId()) == null) {
 					UserPaymentInfo userPaymentInfo = modelMapper.map(userPaymentInfoForm, UserPaymentInfo.class);
 					userService.insertUserPaymentInfo(userPaymentInfo);
 				}else {
+					List<UserPaymentInfo> userPaymentInfoList = userService.getUserPaymentInfo(loginUser.getUserId());
+					if(userPaymentInfoList.contains(userPaymentInfoForm)) {
+
+					}
 					UserPaymentInfo userPaymentInfo = modelMapper.map(userPaymentInfoForm, UserPaymentInfo.class);
 					userService.updateUserPaymentInfo(userPaymentInfo);
 				}
@@ -230,5 +288,22 @@ public class SignupController {
 
 		return "redirect:/item/itemList";
 	}
+
+	@PostMapping(value="/EditUserPaymentInfo", params="deletion")
+	public String postUserPaymentInfoDeletion(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute @Validated UserPaymentInfoForm userPaymentInfoForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+		}
+
+
+		User loginUser = userService.getLoginUser(user.getUsername());
+		model.addAttribute("loginUserName", user.getUsername());
+		UserPaymentInfo userPaymentInfo = modelMapper.map(userPaymentInfoForm, UserPaymentInfo.class);
+		userService.deleteUserPaymentInfo(userPaymentInfo);
+
+		return "redirect:/item/itemList";
+	}
+
+
 
 }

@@ -1,4 +1,5 @@
 package katachi.spring.exercise.repository;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,10 @@ public interface UserMapper {
 	public User findLoginUserById(int userId);
 	public User findLoginUser(String userName);
 
-	public UserPaymentInfo findUserPaymentInfo(@Param("userId")int userId);
+	public List<UserPaymentInfo> findUserPaymentInfo(@Param("userId")int userId);
+	public UserPaymentInfo findUserPaymentInfoByCreditCardNumber(@Param("creditCardNumber")String creditCardNumber);
+
+	public void deleteUserPaymentInfo(@Param("userPaymentInfo")UserPaymentInfo userPaymentInfo);
 
 	public void updateUserInfo(@Param("user")User user);
 

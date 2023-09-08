@@ -31,7 +31,8 @@
 			credit_card_user_name,
 			credit_card_expiration_month,
 			credit_card_verification_code,
-			order_date_time
+			order_date_time,
+			is_deleted
 		) values(
 			#{order.orderId},
 			#{order.userId},
@@ -43,7 +44,8 @@
 			#{order.creditCardUserName},
 			#{order.creditCardExpirationMonth},
 			#{order.creditCardVerificationCode},
-			#{order.orderDateTime}
+			#{order.orderDateTime},
+			0
 		)
 	</insert>
 
@@ -58,7 +60,8 @@
 			credit_card_user_name,
 			credit_card_expiration_month,
 			credit_card_verification_code,
-			order_date_time
+			order_date_time,
+			is_deleted
 		) values(
 			#{order.orderId},
 			#{order.addressee},
@@ -69,13 +72,20 @@
 			#{order.creditCardUserName},
 			#{order.creditCardExpirationMonth},
 			#{order.creditCardVerificationCode},
-			#{order.orderDateTime}
+			#{order.orderDateTime},
+			0
 		)
 	</insert>
 
 	<select id="getOrder" resultMap="Order">
-		select * from orders where order_id = #{orderId}
+		select * from orders where order_id = #{orderId} and is_deleted = 0
 	</select>
-
+	<update id="cancelOrder">
+		update orders
+			set
+				is_deleted = 1
+			where
+					user_id = #{userId} and order_id = #{orderId} and is_deleted = 0
+	</update>
 
 </mapper>

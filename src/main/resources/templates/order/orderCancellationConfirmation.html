@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+layout:decorate="~{layout/layout}">
+	<head>
+		<meta charset="UTF-8">
+		<title>注文キャンセル確認</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<h1>注文キャンセル</h1>
+			<h2>以下の注文をキャンセルします。よろしいでしょうか？</h2>
+			<form method="post" th:action="@{/order/orderCancellation}" th:object="${order}">
+				<table border="1" class="table table-bordered">
+					<tr>
+						<input type="hidden" th:field="*{userId}"/>
+						<th><label for="orderId" th:text="#{orderId}"></label></th>
+						<td>
+							<input type="hidden" th:field="*{orderId}"/>
+							<p th:text="*{orderId}"></p>
+						</td>
+					</tr>
+					<tr>
+						<th>ボタン</th>
+						<td><button type="submit" class="btn btn-primary">注文をキャンセルする</button></td>
+					</tr>
+				</table>
+
+
+			</form>
+
+		</div>
+
+	</body>
+</html>

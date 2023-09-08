@@ -13,12 +13,22 @@
 	background-color:#FFCC99;
 }
 
-.order-user-info tr, .order-item-info tr, .order-total-price tr {
+tr {
 	border-style:ridge;
 	border-color:#6495ed;
-
+	width:100%;
 }
 
-th, td{
-	frame:vsides;
+th{
+	width:40%;
 }
+
+.table, .table-bordered{
+	display:block;
+	width:700px;
+}
+
+td{
+	width:40%;
+}
+

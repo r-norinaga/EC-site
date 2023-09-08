@@ -11,7 +11,7 @@ public class User {
 	private String givenName;
 	private String emailAddress;
 	private String homeAddress;
-
 	private String mobilePhoneNumber;
 	private String addressee;
+	private int isDeleted;
 }

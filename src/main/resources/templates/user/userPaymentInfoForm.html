@@ -11,7 +11,7 @@ layout:decorate="~{layout/layout}">
 	</head>
 	<body>
 		<div layout:fragment="content">
-			<form method="post" th:action="@{/signup/userPaymentInfoUpdate}" th:object="${userPaymentInfoForm}">
+			<form method="post" th:action="@{/signup/EditUserPaymentInfo}" th:object="${userPaymentInfoForm}">
 				<table class="table table-bordered">
 					<input type="hidden" th:field="*{userId}"/>
 					<tr>
@@ -46,7 +46,8 @@ layout:decorate="~{layout/layout}">
 						</td>
 					</tr>
 				</table>
-				<button type="submit" class="btn btn-primary">決済情報変更</button>
+				<button type="submit" class="btn btn-primary" name="edition">決済情報変更</button>
+				<button type="submit" class="btn btn-primary" name="deletion">このクレジットカード情報を削除する</button>
 			</form>
 		</div>
 

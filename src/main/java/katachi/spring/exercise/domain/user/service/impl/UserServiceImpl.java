@@ -1,5 +1,7 @@
 package katachi.spring.exercise.domain.user.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,8 +60,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserPaymentInfo getUserPaymentInfo(int userId) {
+	public List<UserPaymentInfo> getUserPaymentInfo(int userId) {
 		return userMapper.findUserPaymentInfo(userId);
+	}
+
+	@Override
+	public UserPaymentInfo getUserPaymentInfoByCreditCardNumber(String creditCardNumber) {
+		return userMapper.findUserPaymentInfoByCreditCardNumber(creditCardNumber);
+	}
+
+	@Override
+	public void deleteUserPaymentInfo(UserPaymentInfo userPaymentInfo){
+		userMapper.deleteUserPaymentInfo(userPaymentInfo);
 	}
 
 	@Override
@@ -78,4 +90,6 @@ public class UserServiceImpl implements UserService {
 	public void updateUserPaymentInfo(UserPaymentInfo userPaymentInfo) {
 		userMapper.updateUserPaymentInfo(userPaymentInfo);
 	}
+
+
 }

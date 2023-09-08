@@ -12,7 +12,9 @@
 <result column="price" property="price"/>
 <result column="registration_date_time" property="registrationDateTime"/>
 <result column="update_date_time" property="updateDateTime"/>
-<result column="deleteion" property="deletion"/>
+<!--
+	<result column="is_deleted" property="isDeleted"/>
+ -->
 <result column="stock" property="stock"/>
 <result column="description" property="description"/>
 <result column="image" property="image"/>
@@ -23,11 +25,11 @@
 
 <!-- ユーザー複数件取得 -->
 <select id="findMany" resultMap="item">
-	select * from items
+	select * from items where is_deleted = 0
 </select>
 
 <select id="findOne" resultMap="item">
-	select * from items where id = #{id}
+	select * from items where id = #{id} and is_deleted = 0
 </select>
 
 </mapper>

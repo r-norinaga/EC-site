@@ -28,6 +28,7 @@ public class Order {
 	private String creditCardVerificationCodeAsterisked;
 
 
+
 	public String asteriskingCreditCardNumber() {
 		if(this.creditCardNumber.length() == 16) {
 

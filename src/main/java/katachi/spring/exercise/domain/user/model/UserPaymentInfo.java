@@ -20,4 +20,6 @@ public class UserPaymentInfo {
 
 	@NotBlank
 	private String creditCardVerificationCode;
+
+
 }

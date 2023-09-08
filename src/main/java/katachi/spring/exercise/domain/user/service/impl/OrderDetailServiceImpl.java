@@ -25,4 +25,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 		return orderDetailMapper.findOne(orderId);
 	}
 
+	@Override
+	public void cancelOrder(int orderId) {
+		orderDetailMapper.cancelOrder(orderId);
+	}
+
 }

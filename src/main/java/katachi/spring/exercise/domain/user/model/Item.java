@@ -12,7 +12,6 @@ public class Item {
 	 private int price;
 	 private LocalDateTime registrationDateTime;
 	 private LocalDateTime updateDateTime;
-	 private int deletion;
 	 private int stock;
 	 private String description;
 	 private String image;

@@ -19,8 +19,8 @@
 	</resultMap>
 
 	<resultMap type="katachi.spring.exercise.domain.user.model.UserPaymentInfo" id="UserPaymentInfo">
-		<id column="user_id" property="userId"/>
-		<result column="credit_card_number" property="creditCardNumber"/>
+		<id column="credit_card_number" property="creditCardNumber"/>
+		<result column="user_id" property="userId"/>
 		<result column="credit_card_user_name" property="creditCardUserName"/>
 		<result column="credit_card_expiration_month" property="creditCardExpirationMonth"/>
 		<result column="credit_card_verification_code" property="creditCardVerificationCode"/>
@@ -45,7 +45,8 @@
 			email_address,
 			home_address,
 			addressee,
-			mobile_phone_number
+			mobile_phone_number,
+			is_deleted
 		) values(
 			#{user.userName},
 			#{user.password},
@@ -56,31 +57,36 @@
 			#{user.emailAddress},
 			#{user.homeAddress},
 			#{user.addressee},
-			#{user.mobilePhoneNumber}
+			#{user.mobilePhoneNumber},
+			0
 		)
 	</insert>
 
 <!-- ユーザー名の重複の確認 -->
 	<select id="overlappingCheckName" resultType="string">
-		select user_name from users where user_name = #{userName}
+		select user_name from users where user_name = #{userName} and is_deleted = 0
 	</select>
 
 <!-- Emailアドレスの重複の確認 -->
 	<select id="overlappingCheckEmail" resultType="string">
-		select Email_Address from users where Email_Address = #{emailAddress}
+		select Email_Address from users where Email_Address = #{emailAddress} and is_deleted = 0
 	</select>
 
 	<select id="findLoginUser" resultMap="User">
-		select * from users where user_name = #{userName}
+		select * from users where user_name = #{userName} and is_deleted = 0
 	</select>
 
 	<select id="findLoginUserById" resultMap="User">
-		select * from users where user_name = #{userId}
+		select * from users where user_name = #{userId} and is_deleted = 0
 
 	</select>
 
 	<select id="findUserPaymentInfo" resultMap="UserPaymentInfo">
-		select * from user_payment_info where user_id = #{userId}
+		select * from user_payment_info where user_id = #{userId} and is_deleted = 0
+	</select>
+
+	<select id="findUserPaymentInfoByCreditCardNumber" resultMap="UserPaymentInfo">
+		select * from user_payment_info where credit_card_number = #{creditCardNumber} and is_deleted = 0
 	</select>
 
 	<update id="updateUserInfo">
@@ -95,7 +101,7 @@
 				 mobile_phone_number = #{user.mobilePhoneNumber},
 				 update_date_time = now()
 			where
-					user_id = #{user.userId}
+					user_id = #{user.userId} and is_deleted = 0
 	</update>
 
 
@@ -105,26 +111,36 @@
 			credit_card_number,
 			credit_card_user_name,
 			credit_card_expiration_month,
-			credit_card_verification_code
+			credit_card_verification_code,
+			is_deleted
 		) values(
 			#{userPaymentInfo.userId},
 			#{userPaymentInfo.creditCardNumber},
 			#{userPaymentInfo.creditCardUserName},
 			#{userPaymentInfo.creditCardExpirationMonth},
-			#{userPaymentInfo.creditCardVerificationCode}
+			#{userPaymentInfo.creditCardVerificationCode},
+			0
 		)
 	</insert>
 
 	<update id="updateUserPaymentInfo">
 		update user_payment_info
 			set
-				 credit_card_number = #{userPaymentInfo.creditCardNumber},
-				 credit_card_user_name = #{userPaymentInfo.creditCardUserName},
-				 credit_card_expiration_month = #{userPaymentInfo.creditCardExpirationMonth},
-				 credit_card_verification_code = #{userPaymentInfo.creditCardVerificationCode}
+<!--
+				credit_card_number = #{userPaymentInfo.creditCardNumber},
+ -->
+				credit_card_user_name = #{userPaymentInfo.creditCardUserName},
+				credit_card_expiration_month = #{userPaymentInfo.creditCardExpirationMonth},
+				credit_card_verification_code = #{userPaymentInfo.creditCardVerificationCode}
 			where
-					user_id = #{userPaymentInfo.userId}
+					user_id = #{userPaymentInfo.userId} and credit_card_number = #{userPaymentInfo.creditCardNumber} and is_deleted = 0
 	</update>
-
+	<update id="deleteUserPaymentInfo">
+		update user_payment_info
+			set
+				is_deleted = 1
+			where
+					user_id = #{userPaymentInfo.userId} and credit_card_number = #{userPaymentInfo.creditCardNumber} and is_deleted = 0
+	</update>
 
 </mapper>

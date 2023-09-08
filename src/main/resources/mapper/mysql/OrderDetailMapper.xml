@@ -15,16 +15,25 @@
 			order_id,
 			item_id,
 			number,
-			order_date_time
+			order_date_time,
+			is_deleted
 		)values(
 			#{orderDetail.orderId},
 			#{orderDetail.itemId},
 			#{orderDetail.number},
-			#{orderDetail.orderDateTime}
+			#{orderDetail.orderDateTime},
+			0
 		)
 	</insert>
 	<select id="findOne" resultMap="OrderDetail">
-		select * from order_details where order_id = #{orderId}
+		select * from order_details where order_id = #{orderId} and is_deleted = 0
 	</select>
+	<update id="cancelOrder">
+		update order_details
+			set
+				is_deleted = 1
+			where
+				order_id = #{orderId} and is_deleted = 0
+	</update>
 
 </mapper>

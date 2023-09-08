@@ -14,4 +14,5 @@ public interface OrderMapper {
 	public void insertOne(@Param("order")Order order);
 	public void insertOneWithoutUserId(@Param("order")Order order);
 	public Order getOrder(@Param("orderId")int orderId);
+	public void cancelOrder(@Param("userId")int userId, @Param("orderId")int orderId);
 }

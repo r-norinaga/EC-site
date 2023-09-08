@@ -4,4 +4,5 @@ public interface OrderService {
 	public void orderPlacement(Order order);
 	public void orderPlacementWithoutUserId(Order order);
 	public Order getOrder(int orderId);
+	public void cancelOrder(int userId, int orderId);
 }

@@ -31,7 +31,6 @@ import katachi.spring.exercise.domain.user.model.Item;
 import katachi.spring.exercise.domain.user.model.Order;
 import katachi.spring.exercise.domain.user.model.OrderDetail;
 import katachi.spring.exercise.domain.user.model.User;
-import katachi.spring.exercise.domain.user.model.UserPaymentInfo;
 import katachi.spring.exercise.domain.user.service.ItemService;
 import katachi.spring.exercise.domain.user.service.OrderDetailService;
 import katachi.spring.exercise.domain.user.service.OrderService;
@@ -284,26 +283,26 @@ public class ItemListController {
 			model.addAttribute("loginUserName", user.getUsername());
 			User loginUser = userService.getLoginUser(user.getUsername());
 
-			if(paymentInfoFormPrevious.getCreditCardNumber() == null) {
-				UserPaymentInfo userPaymentInfo = userService.getUserPaymentInfo(loginUser.getUserId());
-
-
-				if(err!="error") {
-					if(userPaymentInfo != null) {
-						paymentInfoForm = modelMapper.map(userPaymentInfo, PaymentInfoForm.class);
-
-					}else {
-						paymentInfoForm = new PaymentInfoForm();
-						paymentInfoForm.setUserId(loginUser.getUserId());
-
-					}
-
-				}else {
-					err = "";
-				}
-			}else {
-				paymentInfoForm = paymentInfoFormPrevious;
-			}
+//			if(paymentInfoFormPrevious.getCreditCardNumber() == null) {
+//				UserPaymentInfo userPaymentInfo = userService.getUserPaymentInfo(loginUser.getUserId());
+//
+//
+//				if(err!="error") {
+//					if(userPaymentInfo != null) {
+//						paymentInfoForm = modelMapper.map(userPaymentInfo, PaymentInfoForm.class);
+//
+//					}else {
+//						paymentInfoForm = new PaymentInfoForm();
+//						paymentInfoForm.setUserId(loginUser.getUserId());
+//
+//					}
+//
+//				}else {
+//					err = "";
+//				}
+//			}else {
+//				paymentInfoForm = paymentInfoFormPrevious;
+//			}
 		}else {
 			if(paymentInfoFormPrevious.getCreditCardNumber() != null) {
 				paymentInfoForm = paymentInfoFormPrevious;

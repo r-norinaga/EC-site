@@ -15,7 +15,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public void orderPlacement(Order order) {
-		 orderMapper.insertOne(order);
+		orderMapper.insertOne(order);
 	}
 
 	@Override
@@ -26,5 +26,10 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order getOrder(int orderId) {
 		return orderMapper.getOrder(orderId);
+	}
+
+	@Override
+	public void cancelOrder(int userId, int orderId) {
+		orderMapper.cancelOrder(userId, orderId);
 	}
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+layout:decorate="~{layout/layout}">
+	<head>
+		<meta charset="UTF-8">
+		<title>キャンセル完了</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<h1>注文キャンセル</h1>
+			<h2>下記の注文のキャンセルを完了しました。</h2>
+			<table border="1" class="table table-bordered">
+				<tr>
+					<th><label for="orderId" th:text="#{orderId}"></label></th>
+					<td><p th:text="${order.orderId}"></p></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

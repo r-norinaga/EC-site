@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+	<head>
+		<meta charset="UTF-8">
+		<title>クレジットカード情報一覧</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<h1>登録済みクレジットカード一覧</h1>
+			<table border="1" class="table table-bordered">
+				<tr>
+					<th><label for="creditCardNumber" th:text="#{creditCardNumber}"></label></th>
+				</tr>
+				<tr th:each="userPaymentInfoSingle:${userPaymentInfoList}">
+					<td th:text="${userPaymentInfoSingle.creditCardNumber}"></td>
+
+						<form method="post" th:action="@{/signup/userPaymentInfo}" >
+							<input type="hidden" name="userId" th:value="${userPaymentInfoSingle.userId}" />
+							<input type="hidden" name="creditCardNumber" th:value="${userPaymentInfoSingle.creditCardNumber}" />
+							<input type="hidden" name="creditCardUserName" th:value="${userPaymentInfoSingle.creditCardUserName}" />
+							<input type="hidden" name="creditCardExpirationMonth" th:value="${userPaymentInfoSingle.creditCardExpirationMonth}" />
+							<input type="hidden" name="creditCardVerificationCode" th:value="${userPaymentInfoSingle.creditCardVerificationCode}" />
+							<td>
+								<button class="btn btn-primary"  type="submit">編集</button> <!-- name="edition" -->
+							</td>
+						</form>
+
+
+<!--
+
+ -->
+
+				</tr>
+
+			</table>
+
+
+		</div>
+	</body>
+</html>

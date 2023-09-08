@@ -7,9 +7,14 @@ layout:decorate="~{layout/layout}">
 	</head>
 	<div layout:fragment="content">
 		<h1>購入決定通知</h1>
-		<body>
-			<p>ご注文ありがとうごさいます。注文を決定させた頂きました。</p>
-		</body>
+		<div th:object="${order}">
+			<body>
+				<p>ご注文ありがとうごさいます。注文を決定させた頂きました。</p>
+				<p th:text="*{'今回の注文の注文IDは' + orderId + 'です。'}"></p>
+				<p>注文IDはお控え頂いて、忘備して頂くことをお勧めいたします。</p>
+			</body>
+		</div>
+
 	</div>
 
 </html>
