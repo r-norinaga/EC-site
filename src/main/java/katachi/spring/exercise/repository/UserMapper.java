@@ -25,6 +25,9 @@ public interface UserMapper {
 	public void insertUserPaymentInfo(@Param("userPaymentInfo")UserPaymentInfo userPaymentInfo);
 
 	public void updateUserPaymentInfo(@Param("userPaymentInfo")UserPaymentInfo userPaymentInfo);
+
+	public void deleteUserInfo(@Param("user")User user);
+
 }
 
 

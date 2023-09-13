@@ -126,7 +126,7 @@ public class SignupController {
 		return "user/userInformation";
 	}
 
-	@PostMapping("/updateUserInfo")
+	@PostMapping(value="/updateUserInfo", params="update")
 	public String postUpdateUserInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute @Validated SignupForm signupForm, BindingResult bindingResult) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
@@ -164,6 +164,22 @@ public class SignupController {
 				userService.userInfoChange(userForUpdating);
 				return "redirect:/item/itemList";
 			}
+
+	}
+
+	@PostMapping(value="/updateUserInfo", params="deletion")
+	public String postDeleteUserInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute @Validated SignupForm signupForm, BindingResult bindingResult) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+		}
+
+		User loginUser = userService.getLoginUser(user.getUsername());
+		userService.deleteUserInfo(loginUser);
+		model.addAttribute("user", loginUser);
+
+
+		return "user/deleteUserInfoAcheived";
+
 
 	}
 
@@ -299,9 +315,11 @@ public class SignupController {
 		User loginUser = userService.getLoginUser(user.getUsername());
 		model.addAttribute("loginUserName", user.getUsername());
 		UserPaymentInfo userPaymentInfo = modelMapper.map(userPaymentInfoForm, UserPaymentInfo.class);
+
 		userService.deleteUserPaymentInfo(userPaymentInfo);
 
-		return "redirect:/item/itemList";
+		model.addAttribute("userPaymentInfo", userPaymentInfo);
+		return "user/deleteUserPaymentInfoAchieved";
 	}
 
 

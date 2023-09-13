@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+layout:decorate="~{layout/layout}">
+	<head>
+		<meta charset="UTF-8">
+		<title>決済情報削除完了通知</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<h1>決済情報削除完了通知</h1>
+			<h2>下記の決済情報を削除しました。</h2>
+			<table border="1" class="table table-bordered">
+				<tr>
+					<th><label for="creditCardNumber" th:text="#{creditCardNumber}"></label></th>
+					<td><p th:text="${userPaymentInfo.creditCardNumber}"></p></td>
+				</tr>
+				<tr>
+					<th><label for="creditCardUserName" th:text="#{creditCardUserName}"></label></th>
+					<td><p th:text="${userPaymentInfo.creditCardUserName}"></p></td>
+				</tr>
+
+			</table>
+
+		</div>
+	</body>
+</html>

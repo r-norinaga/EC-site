@@ -19,6 +19,8 @@ public interface UserService {
 	public void deleteUserPaymentInfo(UserPaymentInfo userPaymentInfo);
 	public void userInfoChange(User user);
 
+	public void deleteUserInfo(User user);
+
 	public void insertUserPaymentInfo(UserPaymentInfo userPaymentInfo);
 	public void updateUserPaymentInfo(UserPaymentInfo userPaymentInfo);
 

@@ -91,5 +91,10 @@ public class UserServiceImpl implements UserService {
 		userMapper.updateUserPaymentInfo(userPaymentInfo);
 	}
 
+	@Override
+	public void deleteUserInfo(User user) {
+		userMapper.deleteUserInfo(user);
+	}
+
 
 }
