@@ -30,4 +30,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 		orderDetailMapper.cancelOrder(orderId);
 	}
 
+	@Override
+	public void cancelOrderedItem(OrderDetail orderDetail) {
+		orderDetailMapper.cancelOrderedItem(orderDetail);
+	}
+
 }

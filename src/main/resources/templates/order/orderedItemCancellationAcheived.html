@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+layout:decorate="~{layout/layout}">
+	<head>
+		<meta charset="UTF-8">
+		<title>注文商品キャンセル完了</title>
+	</head>
+	<body>
+		<div layout:fragment="content">
+			<h1>注文キャンセル</h1>
+			<h2>下記の商品の注文のキャンセルを完了しました。</h2>
+			<table border="1" class="table table-bordered">
+				<tr>
+					<th><label for="orderId" th:text="#{orderId}"></label></th>
+					<td><p th:text="${orderDetail.orderId}"></p></td>
+				</tr>
+				<th:block th:if="${item.id == orderDetail.itemId}">
+					<tr>
+						<th><label for="name" th:text="#{name}"></label></th>
+						<td><p th:text="${item.name}"></p></td>
+					</tr>
+					<tr>
+						<th><label for="number" th:text="#{number}"></label></th>
+						<td><p th:text="${orderDetail.number + '個'}"></p></td>
+					</tr>
+				</th:block>
+			</table>
+		</div>
+	</body>
+</html>

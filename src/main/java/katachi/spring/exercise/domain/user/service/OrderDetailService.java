@@ -9,4 +9,5 @@ public interface OrderDetailService {
 	public void orderPlacement(OrderDetail orderDetail);
 	public List<OrderDetail> getOrderDetails(int orderId);
 	public void cancelOrder(int orderId);
+	public void cancelOrderedItem(OrderDetail orderDetail);
 }

@@ -36,4 +36,13 @@
 				order_id = #{orderId} and is_deleted = 0
 	</update>
 
+	<update id="cancelOrderedItem">
+		update order_details
+			set
+				is_deleted = 1
+			where
+				order_id = #{orderDetail.orderId} and  order_detail_id = #{orderDetail.orderDetailId} and is_deleted = 0
+	</update>
+
+
 </mapper>

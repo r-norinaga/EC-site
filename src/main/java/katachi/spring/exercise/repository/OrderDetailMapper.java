@@ -12,4 +12,5 @@ public interface OrderDetailMapper {
 	public void insertOne(@Param("orderDetail")OrderDetail orderDetail);
 	public List<OrderDetail> findOne(@Param("orderId")int orderId);
 	public void cancelOrder(@Param("orderId")int orderId);
+	public void cancelOrderedItem(@Param("orderDetail")OrderDetail orderDetail);
 }

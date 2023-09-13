@@ -23,6 +23,7 @@ layout:decorate="~{layout/layout}">
 							<th><label for="orderId" th:text="#{orderId}"></label></th>
 							<td><p th:field="*{orderId}" th:text="*{orderId}"></p></td>
 							<input type="hidden" th:field="*{orderId}"/>
+
 						</tr>
 						<tr>
 							<th><label for="orderDateTime" th:text="#{orderDateTime}"></label></th>
@@ -55,38 +56,45 @@ layout:decorate="~{layout/layout}">
 						<tr>
 							<button type="submit" class="btn btn-primary" name="orderCancellation">注文情報のキャンセル</button>
 						</tr>
-					</form>
-				</table>
-				<h4>注文された商品の内容</h4>
-				<table border="1" class="table table-bordered order-item-info">
-					<tr class="order-single-item-info">
-						<th><label for="name" th:text="#{name}"></label></th>
-						<th><label for="price" th:text="#{price}"></label></th>
-						<th><label for="number" th:text="#{number}"></label></th>
-					</tr>
-					<tr th:each="item:${orderedItemList}">
-						<div th:each="orderDetail:${orderDetailList}">
-							<form method="post" th:action="@{/order/searchResult}">
-								<th:block th:if="${item.id == orderDetail.itemId}">
-									<td th:text="${item.name}"></td>
-									<td th:text="${item.price + '円'}"></td>
-									<input type="hidden" name="orderDetailId" th:value="${orderDetail.orderDetailId}"/>
-									<td th:text="${orderDetail.number + '個'}"></td>
-									<td><button type="submit" class="btn btn-primary" name="orderedItemCancellation">該当商品の注文のキャンセル</button></td>
-								</th:block>
-							</form>
-						</div>
-					</tr>
-				</table>
-				<table border="1" class="table table-bordered order-total-price">
-					<tr>
-						<th><label for="totalPrice" th:text="#{totalPrice}"></label></th>
-					</tr>
 
-					<tr>
-						<td th:text="${totalPriceOfAnOrder + '円'}"></td>
-					</tr>
-				</table>
+						</table>
+						<h4>注文された商品の内容</h4>
+						<table border="1" class="table table-bordered order-item-info">
+							<tr class="order-single-item-info">
+								<th><label for="name" th:text="#{name}"></label></th>
+								<th><label for="price" th:text="#{price}"></label></th>
+								<th><label for="number" th:text="#{number}"></label></th>
+							</tr>
+							<tr th:each="item:${orderedItemList}">
+								<div th:each="orderDetail:${orderDetailList}">
+									<form method="post" th:action="@{/order/searchResult}">
+										<th:block th:if="${item.id == orderDetail.itemId}">
+											<input type="hidden" name="itemId" th:value="${item.id}"/>
+											<td th:text="${item.name}"></td>
+											<td th:text="${item.price + '円'}"></td>
+											<input type="hidden" name="orderDetailId" th:value="${orderDetail.orderDetailId}"/>
+											<td th:text="${orderDetail.number + '個'}"></td>
+											<input type="hidden" name="number" th:value="${orderDetail.number}"/>
+											<input type="hidden" name="orderId" th:value="${orderDetail.orderId}"/>
+											<input type="hidden" name="orderDetail.itemId" th:value="${orderDetail.itemId}"/>
+											<input type="hidden" name="item.id" th:value="${item.id}"/>
+											<input type="hidden" name="item.name" th:value="${item.name}"/>
+											<td><button type="submit" class="btn btn-primary" name="orderedItemCancellation">該当商品の注文のキャンセル</button></td>
+										</th:block>
+									</form>
+								</div>
+							</tr>
+						</table>
+					</form>
+					<table border="1" class="table table-bordered order-total-price">
+						<tr>
+							<th><label for="totalPrice" th:text="#{totalPrice}"></label></th>
+						</tr>
+
+						<tr>
+							<td th:text="${totalPriceOfAnOrder + '円'}"></td>
+						</tr>
+					</table>
 			</th:block>
 		</div>
 	</body>

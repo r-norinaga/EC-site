@@ -110,7 +110,7 @@ public class OrderController {
 	}
 
 	@PostMapping(value="/searchResult", params="orderCancellation")
-	public String postSearchResult(Model model, @ModelAttribute Order order, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
+	public String postSearchResultOrderCancellation(Model model, @ModelAttribute Order order, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -135,7 +135,7 @@ public class OrderController {
 	}
 
 	@PostMapping("/orderCancellation")
-	public String postOrderCancelation(Model model, @ModelAttribute Order order, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
+	public String postOrderCancelation(Model model, @ModelAttribute("order") Order order, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -146,6 +146,55 @@ public class OrderController {
 		model.addAttribute("order", order);
 
 		return "order/orderCancellationAcheived";
+	}
+
+	@PostMapping(value="/searchResult", params="orderedItemCancellation")
+	public String postSearchResultOrderDetailCancellation(Model model, @ModelAttribute("order") Order order, @ModelAttribute("orderDetail")OrderDetail orderDetail, @ModelAttribute("item")Item item, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+		}
+
+		redirectAttributes.addFlashAttribute("order", order);
+		redirectAttributes.addFlashAttribute("orderDetail", orderDetail);
+		redirectAttributes.addFlashAttribute("item", item);
+
+
+
+		return "redirect:/order/orderedItemCancellation";
+	}
+
+	@GetMapping("/orderedItemCancellation")
+	public String getOrderDetailCancelation(Model model, @ModelAttribute("order") Order order, @ModelAttribute("orderDetail")OrderDetail orderDetail, @ModelAttribute Item item, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+		}
+
+		item = itemService.getItem(orderDetail.getItemId());
+		model.addAttribute("order", order);
+		model.addAttribute("orderDetail", orderDetail);
+		model.addAttribute("item", item);
+
+		return "order/orderedItemCancellationConfirmation";
+	}
+
+	@PostMapping("/orderedItemCancellation")
+	public String postOrderDetailCancelation(Model model, @ModelAttribute("order")Order order, @ModelAttribute("orderDetail")OrderDetail orderDetail, @ModelAttribute("item")Item item, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
+		if(user != null) {
+			model.addAttribute("loginUserName", user.getUsername());
+		}
+
+
+//		orderService.cancelOrder(order.getUserId(), order.getOrderId());
+		orderDetailService.cancelOrderedItem(orderDetail);
+		List<OrderDetail> orderDetailList =orderDetailService.getOrderDetails(orderDetail.getOrderId());
+		if(orderDetailList.size() == 0) {
+			redirectAttributes.addFlashAttribute("order", order);
+			return postOrderCancelation(model, order, redirectAttributes, user);
+		}
+		model.addAttribute("order", order);
+		model.addAttribute("orderDetail", orderDetail);
+		model.addAttribute("item", item);
+		return "order/orderedItemCancellationAcheived";
 	}
 
 }
