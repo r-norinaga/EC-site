@@ -68,3 +68,13 @@ https://github.com/r-norinaga/EC-site/assets/138180446/622d7f09-aad1-4117-8139-c
 
 https://github.com/r-norinaga/EC-site/assets/138180446/9ed14b13-946d-4a6d-b281-3822c30f40fb
 
+
+
+
+### ユーザー情報の更新・削除
+
+
+
+
+https://github.com/r-norinaga/EC-site/assets/138180446/29cb74da-cc8d-4424-99c8-d044b3f34cc7
+
