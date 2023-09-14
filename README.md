@@ -57,3 +57,14 @@ https://github.com/r-norinaga/EC-site/assets/138180446/ebcb2700-7181-4250-b386-2
 
 https://github.com/r-norinaga/EC-site/assets/138180446/622d7f09-aad1-4117-8139-c05a11c428b3
 
+
+
+### ユーザー登録未入力(バリデーション)
+
+
+
+
+
+
+https://github.com/r-norinaga/EC-site/assets/138180446/9ed14b13-946d-4a6d-b281-3822c30f40fb
+
