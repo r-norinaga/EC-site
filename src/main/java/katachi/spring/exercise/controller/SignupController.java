@@ -162,7 +162,8 @@ public class SignupController {
 			} else {
 				User userForUpdating = modelMapper.map(signupForm, User.class);
 				userService.userInfoChange(userForUpdating);
-				return "redirect:/item/itemList";
+				model.addAttribute("user", userForUpdating);
+				return "user/userInfoUpdateAchieved";
 			}
 
 	}
@@ -175,6 +176,7 @@ public class SignupController {
 
 		User loginUser = userService.getLoginUser(user.getUsername());
 		userService.deleteUserInfo(loginUser);
+		userService.deleteUserPaymentInfoOnlyByUserId(loginUser.getUserId());
 		model.addAttribute("user", loginUser);
 
 
@@ -184,7 +186,7 @@ public class SignupController {
 	}
 
 	@GetMapping("/userPaymentInfo")
-	public String getUserPaymentInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute UserPaymentInfoForm userPaymentInfoForm) {
+	public String getUserPaymentInfo(Model model, @AuthenticationPrincipal UserDetails user, @ModelAttribute("userPaymentInfoForm") UserPaymentInfoForm userPaymentInfoForm, RedirectAttributes redirectAttributes) {
 		if(user != null) {
 			model.addAttribute("loginUserName", user.getUsername());
 		}
@@ -197,9 +199,10 @@ public class SignupController {
 			if(userPaymentInfoList.size() != 0) {
 				model.addAttribute("userPaymentInfoList", userPaymentInfoList);
 			}else {
-//				userPaymentInfoForm = new UserPaymentInfoForm();
-//				userPaymentInfoForm.setUserId(loginUser.getUserId());
-//				model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
+				userPaymentInfoForm = new UserPaymentInfoForm();
+				userPaymentInfoForm.setUserId(loginUser.getUserId());
+				redirectAttributes.addFlashAttribute("userPaymentInfoForm", userPaymentInfoForm);
+				return "redirect:/signup/EditUserPaymentInfo";
 			}
 			model.addAttribute("userPaymentInfoForm", userPaymentInfoForm);
 
@@ -294,15 +297,23 @@ public class SignupController {
 					userService.insertUserPaymentInfo(userPaymentInfo);
 				}else {
 					List<UserPaymentInfo> userPaymentInfoList = userService.getUserPaymentInfo(loginUser.getUserId());
-					if(userPaymentInfoList.contains(userPaymentInfoForm)) {
-
-					}
 					UserPaymentInfo userPaymentInfo = modelMapper.map(userPaymentInfoForm, UserPaymentInfo.class);
-					userService.updateUserPaymentInfo(userPaymentInfo);
+					if(userService.getUserPaymentInfoByCreditCardNumber(userPaymentInfo.getCreditCardNumber()) != null) {
+
+						userService.updateUserPaymentInfo(userPaymentInfo);
+						userPaymentInfo.asteriskingCreditCardNumber();
+						model.addAttribute("userPaymentInfo", userPaymentInfo);
+					}else {
+
+						userPaymentInfo.asteriskingCreditCardNumber();
+						userService.insertUserPaymentInfo(userPaymentInfo);
+						model.addAttribute("userPaymentInfo", userPaymentInfo);
+					}
+
 				}
 			}
 
-		return "redirect:/item/itemList";
+		return "user/userPaymentInfoUpdateAchieved";
 	}
 
 	@PostMapping(value="/EditUserPaymentInfo", params="deletion")

@@ -17,6 +17,7 @@ public interface UserService {
 	public List<UserPaymentInfo> getUserPaymentInfo(int userId);
 	public UserPaymentInfo getUserPaymentInfoByCreditCardNumber(String creditCardNumber);
 	public void deleteUserPaymentInfo(UserPaymentInfo userPaymentInfo);
+	public void deleteUserPaymentInfoOnlyByUserId(int userId);
 	public void userInfoChange(User user);
 
 	public void deleteUserInfo(User user);

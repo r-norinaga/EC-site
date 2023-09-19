@@ -149,7 +149,13 @@
 			where
 					user_id = #{userPaymentInfo.userId} and credit_card_number = #{userPaymentInfo.creditCardNumber} and is_deleted = 0
 	</update>
-
+	<update id="deleteUserPaymentInfoOnlyByUserId">
+		update user_payment_info
+			set
+				is_deleted = 1
+			where
+					user_id = #{userId} and is_deleted = 0
+	</update>
 
 
 </mapper>

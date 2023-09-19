@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void deleteUserPaymentInfoOnlyByUserId(int userId) {
+		userMapper.deleteUserPaymentInfoOnlyByUserId(userId);
+	}
+
+	@Override
 	public void userInfoChange(User user) {
 		String rawPassword = user.getPassword();
 		user.setPassword(passwordEncoder.encode(rawPassword));

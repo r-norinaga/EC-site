@@ -19,6 +19,7 @@ public interface UserMapper {
 	public UserPaymentInfo findUserPaymentInfoByCreditCardNumber(@Param("creditCardNumber")String creditCardNumber);
 
 	public void deleteUserPaymentInfo(@Param("userPaymentInfo")UserPaymentInfo userPaymentInfo);
+	public void deleteUserPaymentInfoOnlyByUserId(@Param("userId")int userId);
 
 	public void updateUserInfo(@Param("user")User user);
 
