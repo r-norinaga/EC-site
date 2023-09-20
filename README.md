@@ -50,6 +50,15 @@ https://github.com/r-norinaga/EC-site/assets/138180446/2a9462d0-b685-46a8-bd6e-c
 https://github.com/r-norinaga/EC-site/assets/138180446/ebcb2700-7181-4250-b386-27db9a0db855
 
 
+### 注文キャンセル
+
+
+
+https://github.com/r-norinaga/EC-site/assets/138180446/bbeb21df-4f7c-410d-b136-3a6287590d01
+
+
+
+
 ### ユーザー登録、ログイン、登録したユーザー情報の確認(ログインユーザーのみ)
 
 
